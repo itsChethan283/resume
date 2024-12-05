@@ -19,7 +19,7 @@ def circular_image(image_path, size=(200, 200)):
 
 image, details = st.columns(2)
 with image:
-     st.image(circular_image("rounded_pic.jpg"))
+     st.image(circular_image("81tzqIckFYL.jpg"))
 
 with details:
     st.header("Personal Info..")
