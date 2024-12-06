@@ -4,4 +4,4 @@ langchain
 langchain-community
 faiss-cpu
 pypdf
-streamlit-star-rating
+st-star-rating
