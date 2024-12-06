@@ -98,7 +98,7 @@ with chat:
                         padding: 5px 15px 5px 15px; 
                         text-align: left">{user_ques}</p>''', unsafe_allow_html=True)
             st.session_state.messages.append({"type": "question", "content":user_ques})
-s
+
             st.markdown(f'''<p style="position: relative;
                         background-color: #e0eee1; 
                         margin-top: 5%;
