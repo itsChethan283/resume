@@ -140,10 +140,17 @@ if edu_table == False:
 #Certificates
 if "cert_state" not in st.session_state:
     st.session_state["cert_state"] = None
-certificates, cert_toggle = st.columns([2,6])
+certificates, cert_toggle, info = st.columns([1, 1, 4])
+with info:
+    st.markdown("""
+    <label>
+        <span class="info-icon" data-info="Refresh the page to view new summary">i</span>
+    </label>
+    """, unsafe_allow_html=True)
 with certificates:
     st.header("Certificates")
 with cert_toggle:
+    
     cert_summarize = st.toggle("Summarize")
 if cert_summarize and st.session_state["cert_state"] == None:
     cert_summary = chatting("Can you explain in detail about the certificates you have given in your resume.")
@@ -197,3 +204,55 @@ st.write("**NCC**, *Cadet Sergeant Major*  \n Sep 2018 – May 2021 | Coimbatore
 
 
 
+# Inject CSS for styling the "i" icon and hover effect
+st.markdown("""
+    <style>
+    .info-icon {
+        display: inline-block;
+        margin-left: 5px;
+        color: #007BFF;
+        background-color: #f0f8ff;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        position: relative;
+    }
+    .info-icon:hover::after {
+        content: attr(data-info);
+        visibility: visible;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%; /* Position tooltip above the icon */
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        opacity: 1;
+        transition: opacity 0.3s;
+    }
+    .info-icon::after {
+        content: "";
+        visibility: hidden;
+        opacity: 0;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# Display a widget with an info icon
+st.markdown("""
+    <label>
+        Enter your name:
+        <span class="info-icon" data-info="This is where you input your full name.">i</span>
+    </label>
+    """, unsafe_allow_html=True)
+
+st.text_input("Your Name:")
