@@ -37,8 +37,9 @@ with details:
             with detail:
                 st.markdown(f"""{de}""", unsafe_allow_html=True)
             i = i + 1
-def chatting(user_ques, embedding_model, vector_store_db):
-    vectorstore = FAISS.load_local(vector_store_db, embedding_model, allow_dangerous_deserialization=True)
+def chatting(user_ques):
+    embedding_model = GoogleGenerativeAIEmbeddings(model = "models/embedding-001", google_api_key="AIzaSyCH-FPn68zYhVAeYfepmxt-W5O6iWMrfDQ")
+    vectorstore = FAISS.load_local("resume_vec", embedding_model, allow_dangerous_deserialization=True)
     relavent_chunks = vectorstore.similarity_search(user_ques)
     # retriver = VectorStoreRetriever(vectorstore=vectorstore)
     prompt_template = """
@@ -80,10 +81,9 @@ with chat:
                             border-radius: 10px;
                             padding: 5px 15px 5px 15px; 
                             text-align: left">{message["content"]}</p>''', unsafe_allow_html=True)
-        user_ques = st.chat_input("Know more.....")
+        user_ques = st.chat_input("Know about me")
         if user_ques != None:
-            embedding_model = GoogleGenerativeAIEmbeddings(model = "models/embedding-001", google_api_key="AIzaSyCH-FPn68zYhVAeYfepmxt-W5O6iWMrfDQ")
-            res = chatting(user_ques, embedding_model, "resume_vec")
+            res = chatting(user_ques)
             ress = res.split("\n")
             response_change = ""
             for response in ress:
@@ -120,24 +120,56 @@ st.markdown("- Kannada(ಕನ್ನಡ)")
 st.markdown("- Tamil(தமிழ்)") 
 st.markdown("- Hindi(हिन्दी)")
 
-st.header("Education")
-# st.write(r"$\textsf{\large B.E. Robotics and Automation}$", "[🔗](https://www.psgtech.edu/)")
-st.write("- **B.E. Robotics and Automation**, [*PSG College of Technology*](https://www.psgtech.edu/)  \nAug 2018 – May 2022 | Coimbatore, India")
-st.write("- **12th State Board(PCCM)**, [*Ebenezer Matric Hr Sec School*](https://ebenezer.ac.in/)  \nJun 2016 – Jun 2018 | Tirupathur, India")
+#Education
+edu, edu_toggle = st.columns([1,6])
+with edu:
+    st.header("Education")
+with edu_toggle:
+    edu_table = st.toggle("View as Table")
+if edu_table:
+    st.markdown("""| Degree | Institute | Duration |
+|---|---|---|
+| B.E. Robotics and Automation | [PSG College of Technology](https://www.psgtech.edu/) (*Coimbatore, India*) | Aug 2018 – May 2022 |
+| 12th State Board(PCCM) | [Ebenezer Matric Hr Sec School](https://ebenezer.ac.in/) (*Tirupathur, India*) | Jun 2016 – Jun 2018 |""")
+if edu_table == False:
+    # st.write(r"$\textsf{\large B.E. Robotics and Automation}$", "[🔗](https://www.psgtech.edu/)")
+    st.write("- **B.E. Robotics and Automation**, [*PSG College of Technology*](https://www.psgtech.edu/)  \nAug 2018 – May 2022 | Coimbatore, India")
+    st.write("- **12th State Board(PCCM)**, [*Ebenezer Matric Hr Sec School*](https://ebenezer.ac.in/)  \nJun 2016 – Jun 2018 | Tirupathur, India")
 
-st.header("Certificates")
-st.write("**Machine Learning with Python** - *Coursera, IBM*[🔗](https://coursera.org/share/7ab8343745c5b1de658344a897363ac0)")
-st.write("**Dataiku** - *Core Designer and ML Practitioner*")
-st.write("**AZ-900** - *Azure Fundamentals*[🔗](https://learn.microsoft.com/api/credentials/share/en-us/ChethanS-5287/EB9E602281361B5B?sharingId=4DD6323CF8660707)")
-st.write("**Generative AI for Data Scientis** - *Coursera, IBM*[🔗](https://coursera.org/share/a23bdb7385c999a9877bd8864b6b2cc8)")
-st.write("**AI-900** - *Azure AI Fundamentals*[🔗](https://learn.microsoft.com/api/credentials/share/en-us/ChethanS-5287/7E5E3E346EBFFD0A?sharingId=4DD6323CF8660707)")
+#Certificates
+certificates, cert_toggle = st.columns([2,6])
+with certificates:
+    st.header("Certificates")
+with cert_toggle:
+    cert_summarize = st.toggle("Summarize")
+if cert_summarize:
+    cert_summary = chatting("Can you explain in detail about the certificates you have given in your resume.")
+    st.markdown(f"""{cert_summary}""")
+if cert_summarize == False:
+    st.write("**Machine Learning with Python** - *Coursera, IBM*[🔗](https://coursera.org/share/7ab8343745c5b1de658344a897363ac0)")
+    st.write("**Dataiku** - *Core Designer and ML Practitioner*")
+    st.write("**AZ-900** - *Azure Fundamentals*[🔗](https://learn.microsoft.com/api/credentials/share/en-us/ChethanS-5287/EB9E602281361B5B?sharingId=4DD6323CF8660707)")
+    st.write("**Generative AI for Data Scientis** - *Coursera, IBM*[🔗](https://coursera.org/share/a23bdb7385c999a9877bd8864b6b2cc8)")
+    st.write("**AI-900** - *Azure AI Fundamentals*[🔗](https://learn.microsoft.com/api/credentials/share/en-us/ChethanS-5287/7E5E3E346EBFFD0A?sharingId=4DD6323CF8660707)")
 
-
-st.header("Skills")
-st.write("**Programming Proficiencies:**  - Python, PySpark, SQL")
-st.write("**Tools:**   Dataiku, Databricks, Azure Data Factory, Azure API App")
-st.write("**Data Science:**  Machine Learning , Natural Language Processing, Deep Learning")
-st.write("**Generative AI:**  Azure OpenAI, Langchain, HuggingFace, RAG, Vectorstore, Embeddings")
+#Skills
+skill, skill_table = st.columns([1,6])
+with skill:
+    st.header("Skills")
+with skill_table:
+    skill_toggle = st.toggle("View as Table", key=2)
+if skill_toggle:
+    st.markdown("""| Programming Proficiencies | Tools | Data Science | Generative AI |
+|:---|:---|:---|:---|
+| Python | Dataiku | Machine Learning | Azure OpenAI | 
+| PySpark | Databricks | Natural Language Processing | Langchain |
+| SQL | Azure Data Factory | Deep Learning | HuggingFace |
+| | Azure API App | | RAG, Vectorstore, Embeddings |""")
+if skill_toggle ==False:
+    st.write("**Programming Proficiencies:**  - Python, PySpark, SQL")
+    st.write("**Tools:**   Dataiku, Databricks, Azure Data Factory, Azure API App")
+    st.write("**Data Science:**  Machine Learning , Natural Language Processing, Deep Learning")
+    st.write("**Generative AI:**  Azure OpenAI, Langchain, HuggingFace, RAG, Vectorstore, Embeddings")
 
 st.header("Projects")
 st.write("""**RedLab**, *Chatbot Testing*  \n - Built a GenAI chatbot testing framework using Python, a Red Team approach to improve reliability and deployed on AWS.
