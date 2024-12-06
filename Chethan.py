@@ -248,12 +248,4 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# Display a widget with an info icon
-st.markdown("""
-    <label>
-        Enter your name:
-        <span class="info-icon" data-info="This is where you input your full name.">i</span>
-    </label>
-    """, unsafe_allow_html=True)
 
-st.text_input("Your Name:")
