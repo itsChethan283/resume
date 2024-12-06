@@ -8,7 +8,6 @@ import requests
 from langchain.prompts import PromptTemplate
 from streamlit_star_rating import st_star_rating
 from datetime import datetime
-import pandas as pd
 import time
 
 llm = GoogleGenerativeAI(model="gemini-pro", api_key="AIzaSyCH-FPn68zYhVAeYfepmxt-W5O6iWMrfDQ")
