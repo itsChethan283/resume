@@ -80,7 +80,7 @@ with chat:
                             border-radius: 10px;
                             padding: 5px 15px 5px 15px; 
                             text-align: left">{message["content"]}</p>''', unsafe_allow_html=True)
-        user_ques = st.chat_input("Know about me")
+        user_ques = st.chat_input("Know more.....")
         if user_ques != None:
             embedding_model = GoogleGenerativeAIEmbeddings(model = "models/embedding-001", google_api_key="AIzaSyCH-FPn68zYhVAeYfepmxt-W5O6iWMrfDQ")
             res = chatting(user_ques, embedding_model, "resume_vec")
