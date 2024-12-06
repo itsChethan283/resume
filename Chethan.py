@@ -6,12 +6,31 @@ from PIL import Image, ImageOps, ImageDraw
 warnings.filterwarnings("ignore", message="missing ScriptRunContext!")
 import requests
 from langchain.prompts import PromptTemplate
+from streamlit_star_rating import st_star_rating
+from datetime import datetime
+import pandas as pd
+import time
 
 llm = GoogleGenerativeAI(model="gemini-pro", api_key="AIzaSyCH-FPn68zYhVAeYfepmxt-W5O6iWMrfDQ")
 
 im = Image.open("fav_icon.jpg")
 st.set_page_config(layout="wide", page_title="Chethan's Resume", page_icon=im)
-st.title("Chethan's Resume")
+st.title("Chethan S")
+
+
+st.markdown("""
+            <style>
+                div[data-testid="column"] {
+                    width: fit-content !important;
+                    flex: unset;
+                    padding:100px;
+                }
+                div[data-testid="column"] * {
+                    width: fit-content !important;
+                }
+            </style>
+            """, unsafe_allow_html=True)
+
 
 
 def circular_image(image_path, size=(200, 200)):
@@ -22,7 +41,7 @@ def circular_image(image_path, size=(200, 200)):
     output.putalpha(mask)
     return output
 
-image, details, chat = st.columns([1, 2, 3])
+image, details, chat = st.columns([1, 1.8, 3.2])
 with image:
      st.image(circular_image("rounded_pic.jpg"))
 
@@ -30,14 +49,21 @@ with details:
     st.header("Personal Info..")
     detail, ddk = st.columns([15,1])
     # icons = ["📧", "📞", "📅", "🌏", "🔗", "🔗"]
-    dets = ["📧 &nbsp; &nbsp; [srichethan283@gmail.com](mailto:srichethan283@gmail.com)", "📞 &nbsp; &nbsp; [6383367510](tel:6383367510)", "📅 &nbsp; &nbsp; 31/08/1999", "🌏 &nbsp; &nbsp; Indian", "🔗 &nbsp; &nbsp; [itsChethan283 (Github)](https://github.com/itsChethan283)", "🔗 &nbsp; &nbsp; [chethans283 (LinkedIn)](https://www.linkedin.com/in/chethans283/)"]
+    dets = ["📅 &nbsp; &nbsp; 31/08/1999", "🌏 &nbsp; &nbsp; Indian", "📞 &nbsp; &nbsp; [6383367510](tel:6383367510)"]
     with st.container():
+        st.markdown("""📧  &nbsp; &nbsp; <a href="mailto:srichethan283@gmail.com?subject=Lets discuss&amp;">srichethan283@gmail.com</a>""", unsafe_allow_html=True)
         for i, de in zip(range(6), dets):
-            # with icon:
-            #     st.markdown(f"""{ic}""", unsafe_allow_html=True)
             with detail:
                 st.markdown(f"""{de}""", unsafe_allow_html=True)
             i = i + 1
+        st.markdown(f"""
+<a class="libutton" href="https://github.com/itsChethan283" target="_blank">Github</a>"""
+, unsafe_allow_html=True)
+        st.markdown("""
+<a class="libutton" href="https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=chethans283" target="_blank">Follow on LinkedIn</a>"""
+, unsafe_allow_html=True)
+
+
 def chatting(user_ques):
     embedding_model = GoogleGenerativeAIEmbeddings(model = "models/embedding-001", google_api_key="AIzaSyCH-FPn68zYhVAeYfepmxt-W5O6iWMrfDQ")
     vectorstore = FAISS.load_local("resume_vec", embedding_model, allow_dangerous_deserialization=True)
@@ -138,27 +164,41 @@ if edu_table == False:
     st.write("- **B.E. Robotics and Automation**, [*PSG College of Technology*](https://www.psgtech.edu/)  \nAug 2018 – May 2022 | Coimbatore, India")
     st.write("- **12th State Board(PCCM)**, [*Ebenezer Matric Hr Sec School*](https://ebenezer.ac.in/)  \nJun 2016 – Jun 2018 | Tirupathur, India")
 
-#Certificates
-if "cert_state" not in st.session_state:
-    st.session_state["cert_state"] = None
-certificates, cert_toggle, info = st.columns([1, 1, 4])
-with info:
-    st.markdown("""
-    <label>
-        <span class="info-icon" data-info="Refresh the page to view new summary">i</span>
-    </label>
-    """, unsafe_allow_html=True)
-with certificates:
+# #Certificates
+# if "cert_state" not in st.session_state:
+#     st.session_state["cert_state"] = None
+# certificates, cert_toggle, info = st.columns([1, 1, 4])
+# with info:
+#     st.markdown("""
+#     <label>
+#         <span class="info-icon" data-info="Refresh the page to view new summary">i</span>
+#     </label>
+#     """, unsafe_allow_html=True)
+# with certificates:
+#     st.header("Certificates")
+# with cert_toggle:
+#     cert_summarize = st.toggle("Summarize")
+# if cert_summarize and st.session_state["cert_state"] == None:
+#     cert_summary = chatting("Can you explain in detail about the certificates you have given in your resume.")
+#     st.session_state["cert_state"] = cert_summary
+# if cert_summarize and st.session_state['cert_state'] != None:
+#     st.markdown(f"""{st.session_state["cert_state"]}""")
+# if cert_summarize == False:
+#Courses
+cert, cert_toggle = st.columns([1,5])
+with cert:
     st.header("Certificates")
 with cert_toggle:
-    
-    cert_summarize = st.toggle("Summarize")
-if cert_summarize and st.session_state["cert_state"] == None:
-    cert_summary = chatting("Can you explain in detail about the certificates you have given in your resume.")
-    st.session_state["cert_state"] = cert_summary
-if cert_summarize and st.session_state['cert_state'] != None:
-    st.markdown(f"""{st.session_state["cert_state"]}""")
-if cert_summarize == False:
+    cert_table = st.toggle("View as a Table")
+if cert_table:
+    st.markdown("""| Course | Provider |
+|---|---|
+| Machine Learning with Python | Coursera, IBM |
+| Dataiku — Core Designer and ML Practitioner | Dataiku |
+| AZ-900 — Azure Fundamentals | Microsoft |
+| Generative AI for Data Scientist | Coursera, IBM |
+| AI-900 — Azure AI Fundamentals | Microsoft |""")
+if cert_table == False:
     st.write("**Machine Learning with Python** - *Coursera, IBM*[🔗](https://coursera.org/share/7ab8343745c5b1de658344a897363ac0)")
     st.write("**Dataiku** - *Core Designer and ML Practitioner*")
     st.write("**AZ-900** - *Azure Fundamentals*[🔗](https://learn.microsoft.com/api/credentials/share/en-us/ChethanS-5287/EB9E602281361B5B?sharingId=4DD6323CF8660707)")
@@ -166,7 +206,7 @@ if cert_summarize == False:
     st.write("**AI-900** - *Azure AI Fundamentals*[🔗](https://learn.microsoft.com/api/credentials/share/en-us/ChethanS-5287/7E5E3E346EBFFD0A?sharingId=4DD6323CF8660707)")
 
 #Skills
-skill, skill_table = st.columns([1,6])
+skill, skill_table = st.columns([1,5])
 with skill:
     st.header("Skills")
 with skill_table:
@@ -184,24 +224,44 @@ if skill_toggle ==False:
     st.write("**Data Science:**  Machine Learning , Natural Language Processing, Deep Learning")
     st.write("**Generative AI:**  Azure OpenAI, Langchain, HuggingFace, RAG, Vectorstore, Embeddings")
 
-st.header("Projects")
-st.write("""**RedLab**, *Chatbot Testing*  \n - Built a GenAI chatbot testing framework using Python, a Red Team approach to improve reliability and deployed on AWS.
+#Projects
+project, project_toggle = st.columns([1,6])
+with project:
+    st.header("Projects")
+with project_toggle:
+    project_table = st.toggle("View as a table")
+if project_table:
+    st.markdown("""| Project | Description |
+|---|---|
+| RedLab, Chatbot Testing | Built a GenAI chatbot testing framework using Python, a Red Team approach to improve reliability and deployed on AWS. Created Red and Green apps for adversarial testing and validation, with detailed reporting. |
+| Trade Promotions (POC) | Built a technical architecture for a RAG-based chatbot with guardrails for secure, accurate responses. |
+| Altreryx to Dataiku (POC) | Extracted data from YXMD files to generate corresponding PySpark functions. Developed a Python accelerator replicating Alteryx functions using PySpark in Dataiku. |
+| Adobe ColdFusion to .Net (POC) | Leveraged Azure OpenAI and open-source LLMs to assess conversion accuracy. Built a Python accelerator for functions with lower accuracy in the LLM evaluations. |""")
+if project_table == False:
+    st.write("""**RedLab**, *Chatbot Testing*  \n - Built a GenAI chatbot testing framework using Python, a Red Team approach to improve reliability and deployed on AWS.
 - Created Red and Green apps for adversarial testing and validation, with detailed reporting.""")
-st.write("""**Trade Promotions**, *(POC)*  \n - Built a technical architecture for a RAG-based chatbot with guardrails for secure, accurate responses.
+    st.write("""**Trade Promotions**, *(POC)*  \n - Built a technical architecture for a RAG-based chatbot with guardrails for secure, accurate responses.
 - Created a demo version to showcase its functionality and compliance with the guardrails.""")
-st.write("""**Altreryx to Dataiku**, *(POC)*  \n - Extracted data from YXMD files to generate corresponding PySpark functions.
+    st.write("""**Altreryx to Dataiku**, *(POC)*  \n - Extracted data from YXMD files to generate corresponding PySpark functions.
 - Developed a Python accelerator replicating Alteryx functions using PySpark in Dataiku.""")
-st.write("""**Adobe ColdFusion to .Net**, *(POC)*  \n - Leveraged Azure OpenAI and open-source LLMs to assess conversion accuracy.
+    st.write("""**Adobe ColdFusion to .Net**, *(POC)*  \n - Leveraged Azure OpenAI and open-source LLMs to assess conversion accuracy.
 - Built a Python accelerator for functions with lower accuracy in the LLM evaluations.""")
 
 st.header("Organisations")
 st.write("**Student's Union**, *Core Member*  \n Sep 2019 – Jun 2021 | Coimbatore, India")
 st.write("**NCC**, *Cadet Sergeant Major*  \n Sep 2018 – May 2021 | Coimbatore, India")
 
-# st.components.v1.iframe("https://knowyourpdf.streamlit.app/?embedded=true", height=400, scrolling=True)
-
-
-##Add a questionare bar to ask about him
+with open("Chethan S.pdf", "rb") as file:
+    st.write("***")
+    btn = st.download_button(
+        label="Download my Resume",
+        data=file,
+        file_name="Chethan S's Resume.pdf",
+    )
+    if btn:
+        with open("stars.txt", "a") as f:
+            formatted_date = datetime.now().strftime('%d %m %Y')
+            f.write(f"{formatted_date}: Downloaded \n")
 
 
 
@@ -248,4 +308,40 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
+st.markdown("""
+      <style>
+        .libutton {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          padding: 7px;
+          text-align: center;
+          margin-bottom: 19px;
+          outline: none;
+          text-decoration: none !important;
+          color: #ffffff !important;
+          width: 200px;
+          height: 32px;
+          border-radius: 16px;
+          background-color: #0A66C2;
+          font-family: "SF Pro Text", Helvetica, sans-serif;
+        }
+      </style>""", unsafe_allow_html=True)
 
+stars = st_star_rating("Please rate my resume", maxValue=5, defaultValue=30, key="rating", dark_theme = False)
+
+if stars:
+    with open("stars.txt", "a") as f:
+        formatted_date = datetime.now().strftime('%d %m %Y')
+        f.write(f"{formatted_date}:{stars} Stars \n")
+
+if "last_refresh" not in st.session_state:
+    st.session_state.last_refresh = time.time()
+
+current_time = time.time()
+if current_time - st.session_state.last_refresh > 10:
+    with open("stars.txt", "a") as f:
+        formatted_date = datetime.now().strftime('%d %m %Y')
+        formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(current_time))
+        f.write(f"{formatted_date}:{formatted_time} Refreshed \n")
+st.session_state.last_refresh = current_time
