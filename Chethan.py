@@ -344,3 +344,17 @@ if current_time - st.session_state.last_refresh > 10:
         formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(current_time))
         f.write(f"{formatted_date}:{formatted_time} Refreshed \n")
 st.session_state.last_refresh = current_time
+
+
+st.markdown(
+    """
+    <style>
+    .css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob,
+    .styles_viewerBadge__1yB5_, .viewerBadge_link__1S137,
+    .viewerBadge_text__1JaDK {
+        display: none;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
