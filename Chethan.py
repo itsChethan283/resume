@@ -9,8 +9,9 @@ from langchain.prompts import PromptTemplate
 
 llm = GoogleGenerativeAI(model="gemini-pro", api_key="AIzaSyCH-FPn68zYhVAeYfepmxt-W5O6iWMrfDQ")
 
-st.set_page_config(layout="wide")
-st.title("Chethan S")
+im = Image.open("fav_icon.jpg")
+st.set_page_config(layout="wide", page_title="Chethan's Resume", page_icon=im)
+st.title("Chethan's Resume")
 
 
 def circular_image(image_path, size=(200, 200)):
