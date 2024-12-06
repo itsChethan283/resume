@@ -126,6 +126,7 @@ with edu:
     st.header("Education")
 with edu_toggle:
     edu_table = st.toggle("View as Table")
+
 if edu_table:
     st.markdown("""| Degree | Institute | Duration |
 |---|---|---|
@@ -137,14 +138,18 @@ if edu_table == False:
     st.write("- **12th State Board(PCCM)**, [*Ebenezer Matric Hr Sec School*](https://ebenezer.ac.in/)  \nJun 2016 – Jun 2018 | Tirupathur, India")
 
 #Certificates
+if "cert_state" not in st.session_state:
+    st.session_state["cert_state"] = None
 certificates, cert_toggle = st.columns([2,6])
 with certificates:
     st.header("Certificates")
 with cert_toggle:
     cert_summarize = st.toggle("Summarize")
-if cert_summarize:
+if cert_summarize and st.session_state["cert_state"] == None:
     cert_summary = chatting("Can you explain in detail about the certificates you have given in your resume.")
-    st.markdown(f"""{cert_summary}""")
+    st.session_state["cert_state"] = cert_summary
+if cert_summarize and st.session_state['cert_state'] != None:
+    st.markdown(f"""{st.session_state["cert_state"]}""")
 if cert_summarize == False:
     st.write("**Machine Learning with Python** - *Coursera, IBM*[🔗](https://coursera.org/share/7ab8343745c5b1de658344a897363ac0)")
     st.write("**Dataiku** - *Core Designer and ML Practitioner*")
@@ -166,7 +171,7 @@ if skill_toggle:
 | SQL | Azure Data Factory | Deep Learning | HuggingFace |
 | | Azure API App | | RAG, Vectorstore, Embeddings |""")
 if skill_toggle ==False:
-    st.write("**Programming Proficiencies:**  - Python, PySpark, SQL")
+    st.write("**Programming Proficiencies:**   Python, PySpark, SQL")
     st.write("**Tools:**   Dataiku, Databricks, Azure Data Factory, Azure API App")
     st.write("**Data Science:**  Machine Learning , Natural Language Processing, Deep Learning")
     st.write("**Generative AI:**  Azure OpenAI, Langchain, HuggingFace, RAG, Vectorstore, Embeddings")
