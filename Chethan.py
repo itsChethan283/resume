@@ -13,7 +13,7 @@ import time
 llm = GoogleGenerativeAI(model="gemini-pro", api_key="AIzaSyCH-FPn68zYhVAeYfepmxt-W5O6iWMrfDQ")
 
 im = Image.open("fav_icon.jpg")
-st.set_page_config(layout="wide", page_title="Chethan's Resume", page_icon=im)
+st.set_page_config(layout="wide", page_title="Chethan's Resume", page_icon=im, theme="light")
 st.title("Chethan S")
 
 
