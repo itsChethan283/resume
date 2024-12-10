@@ -135,6 +135,9 @@ with chat:
                         text-align: left">{response_change}</p>''', unsafe_allow_html=True)
             st.session_state.messages.append({"type": "answer", "content":response_change})
 
+st.header("Professional Experience")
+st.write("**Senior Analyst,** *Capgemini*  \n Sep 2022 – present | Bangalore, India")
+st.write("")
 
 st.header("Profile")
 st.write("""Detail-oriented data specialist with a knack for turning data into actionable insights. Experienced in spotting opportunities and improving processes to help company grow. Passionate about using data to solve problems and drive innovation""")
