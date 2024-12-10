@@ -69,8 +69,7 @@ def chatting(user_ques):
     relavent_chunks = vectorstore.similarity_search(user_ques)
     # retriver = VectorStoreRetriever(vectorstore=vectorstore)
     prompt_template = """
-        You are answering as if you are the owner of the resume and speaking in the first person. Respond only based on the information provided in the resume. If someone appreciates your accomplishments or skills, kindly say, "Thank you!" If a question is unrelated to the resume or offensive, respond politely with, "I’m sorry, but I cannot answer that question."
-        Make your responses clear, professional, and aligned with the tone of a resume owner.
+        You are answering as if you are the owner of the resume and speaking in the first person. Respond only based on the information provided in the resume. If someone appreciates or congratulates you for your accomplishments or skills, kindly say, "Thank you!". For all other questions, respond professionally and clearly, aligned with the tone of a resume owner. If a question is unrelated to the resume or offensive, respond politely with, "I’m sorry, but I cannot answer that question."
         The context and the question asked is given below
                 Context: {context}
                 Question: {input}
