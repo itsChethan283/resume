@@ -10,8 +10,8 @@ from streamlit_star_rating import st_star_rating
 from datetime import datetime
 import time
 
-llm = GoogleGenerativeAI(model="gemini-pro", api_key="AIzaSyCH-FPn68zYhVAeYfepmxt-W5O6iWMrfDQ")
-
+llm = GoogleGenerativeAI(model="gemini/gemini-1.5-flash", api_key="AIzaSyCOesQ-6_nLahzHuAB-UbO_3uU313D0TEA")
+# llm = ChatGoogleGenerativeAI(model="gemini/gemini-1.5-flash",temperature=0.3, api_key="AIzaSyCOesQ-6_nLahzHuAB-UbO_3uU313D0TEA")
 im = Image.open("fav_icon.jpg")
 st.set_page_config(layout="wide", page_title="Chethan's Resume", page_icon=im)
 st.title("Chethan S")
