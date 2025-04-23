@@ -9,8 +9,12 @@ from langchain.prompts import PromptTemplate
 from streamlit_star_rating import st_star_rating
 from datetime import datetime
 import time
+from dotenv import load_dotenv
+import os
 
-llm = GoogleGenerativeAI(model="gemini/gemini-1.5-flash", api_key="AIzaSyCOesQ-6_nLahzHuAB-UbO_3uU313D0TEA")
+load_dotenv()
+
+llm = GoogleGenerativeAI(model=os.getenv("llmmodel"), api_key=os.getenv("g_api"))
 # llm = ChatGoogleGenerativeAI(model="gemini/gemini-1.5-flash",temperature=0.3, api_key="AIzaSyCOesQ-6_nLahzHuAB-UbO_3uU313D0TEA")
 im = Image.open("fav_icon.jpg")
 st.set_page_config(layout="wide", page_title="Chethan's Resume", page_icon=im)
@@ -64,16 +68,21 @@ with details:
 
 
 def chatting(user_ques):
-    embedding_model = GoogleGenerativeAIEmbeddings(model = "models/embedding-001", google_api_key="AIzaSyCOesQ-6_nLahzHuAB-UbO_3uU313D0TEA")
+    embedding_model = GoogleGenerativeAIEmbeddings(model=os.getenv("embeddingmodel"), google_api_key=os.getenv("g_api"))
     vectorstore = FAISS.load_local("resume_vec", embedding_model, allow_dangerous_deserialization=True)
     relavent_chunks = vectorstore.similarity_search(user_ques)
     # retriver = VectorStoreRetriever(vectorstore=vectorstore)
     prompt_template = """
-        You are answering as if you are the owner of the resume and speaking in the first person. Respond only based on the information provided in the resume. If someone appreciates or congratulates you for your accomplishments or skills, kindly say, "Thank you!". For all other questions, respond professionally and clearly, aligned with the tone of a resume owner. If a question is unrelated to the resume or offensive, respond politely with, "I’m sorry, but I cannot answer that question."
-        The context and the question asked is given below
-                Context: {context}
-                Question: {input}
-        ---------------------------------------------------
+        Role: Resume Owner
+
+        Instructions for Responding to Resume Questions:
+
+        First-Person Perspective: Answer as if you are the owner of the resume, using "I" and "my".
+        Resume-Based Responses: Only respond based on the information provided in the resume.
+        Acknowledging Compliments: If someone appreciates or congratulates you for your accomplishments or skills, respond with "Thank you!".
+        Professional and Clear Responses: For all other questions, respond professionally and clearly, aligned with the tone of a resume owner.
+        Handling Unrelated or Offensive Questions: If a question is unrelated to the resume or offensive, respond with "I’m sorry, but I cannot answer that question."
+        Context: {context} Question: {input}
         """
     prompt = PromptTemplate.from_template(prompt_template)
     chain = prompt | llm
@@ -136,11 +145,12 @@ with chat:
             st.session_state.messages.append({"type": "answer", "content":response_change})
 
 st.header("Professional Experience")
-st.write("**Senior Analyst,** *Capgemini*  \n Sep 2022 – present | Bangalore, India")
+st.write("**Associate Consultant,** *Capgemini*  \n April 2025 – present | Bangalore, India")
+st.write("**Senior Analyst,** *Capgemini*  \n Sep 2022 – march 2025 | Bangalore, India")
 st.write("")
 
 st.header("Profile")
-st.write("""Detail-oriented data specialist with a knack for turning data into actionable insights. Experienced in spotting opportunities and improving processes to help company grow. Passionate about using data to solve problems and drive innovation""")
+st.write("""Gen AI Engineer with expertise in Machine Learning, NLP, Deep Learning, and Generative AI. Proven ability to develop and deploy AIdriven solutions with a strong foundation in RAG-based architectures, cloud services, and AI model validation. Passionate about building scalable AI applications and ensuring compliance with security and ethical AI standards.""")
 
 st.header("Languages")
 st.markdown("- English")  
@@ -194,12 +204,14 @@ with cert_toggle:
 if cert_table:
     st.markdown("""| Course | Provider |
 |---|---|
+| AI-102 — Azure AI Engineer Associate | Microsoft |
 | Machine Learning with Python | Coursera, IBM |
 | Dataiku — Core Designer and ML Practitioner | Dataiku |
 | AZ-900 — Azure Fundamentals | Microsoft |
 | Generative AI for Data Scientist | Coursera, IBM |
 | AI-900 — Azure AI Fundamentals | Microsoft |""")
 if cert_table == False:
+    st.write("**AI-102** - *Azure AI Engineer Associate*[🔗](https://learn.microsoft.com/en-us/users/chethans-5287/credentials/2accbc70a0fd7cf7 )")
     st.write("**Machine Learning with Python** - *Coursera, IBM*[🔗](https://coursera.org/share/7ab8343745c5b1de658344a897363ac0)")
     st.write("**Dataiku** - *Core Designer and ML Practitioner*")
     st.write("**AZ-900** - *Azure Fundamentals*[🔗](https://learn.microsoft.com/api/credentials/share/en-us/ChethanS-5287/EB9E602281361B5B?sharingId=4DD6323CF8660707)")
