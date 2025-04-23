@@ -64,7 +64,7 @@ with details:
 
 
 def chatting(user_ques):
-    embedding_model = GoogleGenerativeAIEmbeddings(model = "models/embedding-001", google_api_key="AIzaSyCH-FPn68zYhVAeYfepmxt-W5O6iWMrfDQ")
+    embedding_model = GoogleGenerativeAIEmbeddings(model = "models/embedding-001", google_api_key="AIzaSyCOesQ-6_nLahzHuAB-UbO_3uU313D0TEA")
     vectorstore = FAISS.load_local("resume_vec", embedding_model, allow_dangerous_deserialization=True)
     relavent_chunks = vectorstore.similarity_search(user_ques)
     # retriver = VectorStoreRetriever(vectorstore=vectorstore)
