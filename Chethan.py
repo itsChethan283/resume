@@ -63,7 +63,7 @@ with details:
 <a class="libutton" href="https://github.com/itsChethan283" target="_blank">Github</a>"""
 , unsafe_allow_html=True)
         st.markdown("""
-<a class="libutton" href="https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=chethans283" target="_blank">Follow on LinkedIn</a>"""
+<a class="libutton" href="https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=chethans283" target="_blank">LinkedIn</a>"""
 , unsafe_allow_html=True)
 
 
